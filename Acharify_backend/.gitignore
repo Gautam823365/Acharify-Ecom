@@ -1,0 +1,15 @@
+# Spring Boot
+target/
+
+# Node
+node_modules/
+
+# IDE
+.metadata/
+.project
+.classpath
+.idea/
+.vscode/
+
+# Uploads
+uploads/
