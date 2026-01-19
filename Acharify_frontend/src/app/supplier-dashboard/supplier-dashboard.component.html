@@ -1,0 +1,217 @@
+<div class="container">
+  <div class="page-header">
+    <div class="page-title">
+      <span class="icon">🏪</span>
+      <h1>Supplier Product Management</h1>
+    </div>
+    <p class="page-subtitle">Add and manage your pickle products inventory</p>
+
+     <button class="btn btn-logout"(click)="logout()">
+            Logout
+        </button>
+  </div>
+
+  <div class="main-content">
+    <!-- Add Product Form -->
+    <div class="form-section">
+      <h2 class="section-title">{{ isEditing ? 'Edit Product' : 'Add New Product' }}</h2>
+      
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="form-grid">
+        <!-- Product Image Upload -->
+        <div class="form-group">
+          <label>Product Image <span class="required">*</span></label>
+          <div 
+            class="image-upload-area" 
+            [class.has-image]="currentImage"
+            (click)="triggerFileInput()">
+            <ng-container *ngIf="!currentImage">
+              <div class="upload-icon">📸</div>
+              <div class="upload-text">Click to upload product image</div>
+              <div class="upload-hint">PNG, JPG up to 5MB</div>
+            </ng-container>
+            <ng-container *ngIf="currentImage">
+              <img [src]="currentImage" class="image-preview" alt="Product preview">
+              <div class="upload-text">Click to change image</div>
+            </ng-container>
+          </div>
+          <input 
+  type="file" 
+  id="imageInput" 
+  accept="image/*" 
+  style="display: none;" 
+  (change)="onImageUpload($event)">
+        </div>
+
+        <!-- Product Name -->
+        <div class="form-group">
+          <label for="productName">Product Name <span class="required">*</span></label>
+          <input 
+            type="text" 
+            id="productName"
+            formControlName="name"
+            placeholder="e.g., Mango Pickle"
+            [class.invalid]="productForm.get('name')?.invalid && productForm.get('name')?.touched">
+        </div>
+
+        <!-- Category and Price -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="category">Category <span class="required">*</span></label>
+            <select 
+              id="category" 
+              formControlName="category"
+              [class.invalid]="productForm.get('category')?.invalid && productForm.get('category')?.touched">
+              <option value="">Select Category</option>
+              <option *ngFor="let cat of categories" [value]="cat.value">
+                {{ cat.label }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="price">Price per Unit (₹) <span class="required">*</span></label>
+            <input 
+              type="number" 
+              id="price"
+              formControlName="price"
+              placeholder="155" 
+              min="1"
+              [class.invalid]="productForm.get('price')?.invalid && productForm.get('price')?.touched">
+          </div>
+        </div>
+
+        <!-- Stock and Threshold -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="quantity">Initial Stock Quantity <span class="required">*</span></label>
+            <input 
+              type="number" 
+              id="quantity"
+              formControlName="quantity"
+              placeholder="100" 
+              min="0"
+              [class.invalid]="productForm.get('quantity')?.invalid && productForm.get('quantity')?.touched">
+          </div>
+          <div class="form-group">
+            <label for="threshold">Low Stock Threshold <span class="required">*</span></label>
+            <input 
+              type="number" 
+              id="threshold"
+              formControlName="threshold"
+              placeholder="10" 
+              min="1"
+              [class.invalid]="productForm.get('threshold')?.invalid && productForm.get('threshold')?.touched">
+            <div class="threshold-info">
+              ℹ️ Alert will trigger when stock falls below this number
+            </div>
+          </div>
+        </div>
+
+        <!-- Stock Warning -->
+        <div class="stock-warning" [class.show]="showStockWarning">
+          ⚠️ Warning: Current stock is below the threshold level!
+        </div>
+
+        <!-- Unit and Weight -->
+        <div class="form-row">
+          <div class="form-group">
+            <label for="unit">Unit Type <span class="required">*</span></label>
+            <select 
+              id="unit" 
+              formControlName="unit"
+              [class.invalid]="productForm.get('unit')?.invalid && productForm.get('unit')?.touched">
+              <option value="">Select Unit</option>
+              <option *ngFor="let u of units" [value]="u.value">
+                {{ u.label }}
+              </option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="weight">Weight/Size</label>
+            <input 
+              type="text" 
+              id="weight"
+              formControlName="weight"
+              placeholder="e.g., 500g, 1kg">
+          </div>
+        </div>
+
+        <!-- Description -->
+        <div class="form-group">
+          <label for="description">Product Description</label>
+          <textarea 
+            id="description"
+            formControlName="description"
+            placeholder="Describe your pickle product, ingredients, taste, etc."></textarea>
+        </div>
+
+        <!-- Form Actions -->
+        <div class="form-actions">
+          <button type="button" class="btn btn-secondary" (click)="resetForm()">
+            {{ isEditing ? 'Cancel' : 'Reset' }}
+          </button>
+          <button type="submit" class="btn btn-primary">
+            {{ isEditing ? 'Update Product' : 'Add Product' }}
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Products List -->
+    <div class="products-list">
+      <div class="products-header">
+        <h2 class="section-title" style="margin: 0; border: none; padding: 0;">Your Products</h2>
+        <div class="product-count">{{ products.length }} Product{{ products.length !== 1 ? 's' : '' }}</div>
+      </div>
+      
+      <div class="products-container">
+        <div class="empty-state" *ngIf="products.length === 0">
+          <div class="icon">📦</div>
+          <p>No products added yet</p>
+        </div>
+
+        <div class="product-item" *ngFor="let product of products">
+          <div class="product-header">
+            <div style="display: flex; align-items: flex-start; flex: 1;">
+              <div class="product-image-small">
+                <img *ngIf="product.image" [src]="product.image" 
+                     style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                <span *ngIf="!product.image">🥒</span>
+              </div>
+              <div class="product-info">
+                <div class="product-name">{{ product.name }}</div>
+                <div class="product-category">{{ product.category }} Pickle</div>
+                <span class="stock-badge" [ngClass]="getStockStatus(product)">
+                  {{ getStockLabel(product) }}
+                </span>
+              </div>
+            </div>
+            <div class="product-actions">
+              <button class="btn-icon btn-edit" (click)="editProduct(product)" title="Edit">✏️</button>
+              <button class="btn-icon btn-delete" (click)="deleteProduct(product.id)" title="Delete">🗑️</button>
+            </div>
+          </div>
+          
+          <div class="product-details">
+            <div class="detail-item">
+              <div class="detail-label">Price</div>
+              <div class="detail-value">₹{{ product.price }}</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Stock</div>
+              <div class="detail-value">{{ product.quantity }} {{ product.unit }}</div>
+            </div>
+            <div class="detail-item">
+              <div class="detail-label">Threshold</div>
+              <div class="detail-value">{{ product.threshold }}</div>
+            </div>
+          </div>
+          
+          <div *ngIf="product.description" 
+               style="margin-top: 12px; padding: 12px; background: white; border-radius: 8px; font-size: 14px; color: #666;">
+            {{ product.description }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

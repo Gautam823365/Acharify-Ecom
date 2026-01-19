@@ -1,0 +1,337 @@
+/* Container */
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+  min-height: 100vh;
+  background: #e8f5e9; /* light greenish background */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Card */
+.signup-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  max-width: 420px;
+  width: 100%;
+  padding: 32px 36px;
+  box-sizing: border-box;
+}
+
+/* Header */
+.signup-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.signup-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: #3e2723; /* dark brown */
+}
+
+.signup-subtitle {
+  font-size: 1rem;
+  color: #2e7d32; /* leaf green */
+  margin: 0;
+}
+
+/* Social Signup Buttons */
+.social-signup {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 24px;
+}
+
+.social-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 12px 16px;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  transition: background-color 0.3s ease;
+  color: white;
+  user-select: none;
+}
+
+.social-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+/* Google button */
+.google-btn {
+  background-color: #4285F4;
+}
+
+.google-btn:hover {
+  background-color: #357ae8;
+}
+
+/* GitHub button */
+.github-btn {
+  background-color: #333;
+}
+
+.github-btn:hover {
+  background-color: #24292e;
+}
+
+/* Divider */
+.divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin-bottom: 24px;
+  color: #6d4c41; /* medium brown */
+  font-weight: 600;
+}
+
+.divider::before,
+.divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #c7b8af; /* soft brown */
+}
+
+.divider:not(:empty)::before {
+  margin-right: 10px;
+}
+
+.divider:not(:empty)::after {
+  margin-left: 10px;
+}
+
+/* Form */
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* Form Row for First & Last Name */
+.form-row {
+  display: flex;
+  gap: 10px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Labels */
+.form-label {
+  margin-bottom: 6px;
+  font-weight: 600;
+  color: #3e2723; /* dark brown */
+}
+
+/* Inputs */
+.form-input {
+  padding: 10px 12px;
+  font-size: 1rem;
+  border: 1.5px solid #a1887f; /* soft brown */
+  border-radius: 6px;
+  transition: border-color 0.3s ease;
+  outline-offset: 2px;
+}
+
+.form-input:focus {
+  border-color: #388e3c; /* deep green */
+  outline: none;
+}
+
+/* Error State */
+.form-input.error {
+  border-color: #e53e3e;
+  background-color: #fff5f5;
+}
+
+.error-message {
+  color: #e53e3e;
+  font-size: 0.85rem;
+  margin-top: 4px;
+  min-height: 18px;
+}
+
+/* Password input container with toggle */
+.password-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.password-input {
+  flex: 1;
+  padding-right: 40px; /* space for toggle */
+}
+
+/* Password toggle button */
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6d4c41; /* medium brown */
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #2e7d32; /* dark green */
+}
+
+.toggle-icon {
+  width: 20px;
+  height: 20px;
+  fill: currentColor;
+}
+
+/* Checkbox Group */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  margin-top: 8px;
+}
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  gap: 8px;
+  color: #444;
+  font-size: 0.9rem;
+}
+
+.checkbox-input {
+  width: 18px;
+  height: 18px;
+  appearance: none;
+  border: 1.8px solid #a1887f; /* soft brown */
+  border-radius: 4px;
+  position: relative;
+  cursor: pointer;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+  background-color: white;
+}
+
+.checkbox-input:checked {
+  background-color: #388e3c; /* green */
+  border-color: #388e3c;
+}
+
+.checkbox-input:checked::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 6px;
+  width: 4px;
+  height: 9px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.checkbox-text a.terms-link {
+  color: #2e7d32; /* green */
+  text-decoration: none;
+}
+
+.checkbox-text a.terms-link:hover {
+  text-decoration: underline;
+}
+
+/* Submit Button */
+.submit-btn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 14px 0;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #388e3c, #6d4c41); /* green to brown */
+  color: white;
+  cursor: pointer;
+  transition: opacity 0.3s ease;
+  user-select: none;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.submit-btn:disabled,
+.submit-btn.loading {
+  background-color: #a5d6a7; /* faded green */
+  cursor: not-allowed;
+}
+
+.submit-btn:hover:not(:disabled):not(.loading) {
+  opacity: 0.9;
+}
+
+/* Loading Spinner */
+.loading-spinner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.spinner {
+  animation: spin 1s linear infinite;
+  width: 22px;
+  height: 22px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Footer */
+.signup-footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #5d4037; /* brown */
+}
+
+.login-link {
+  color: #2e7d32; /* green */
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .signup-card {
+    padding: 28px 24px;
+  }
+
+  .form-row {
+    flex-direction: column;
+  }
+}

@@ -1,0 +1,116 @@
+<!-- Loading and Error Messages -->
+<div *ngIf="isLoading" class="loading">Loading profile...</div>
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<!-- Profile Card -->
+<div *ngIf="user" class="profile-card">
+  
+  <!-- Avatar Section -->
+  <div class="avatar-container">
+    <img 
+      [src]="user?.profileImage + '?t=' + timestamp" 
+      (click)="onAvatarClick()" 
+      alt="Profile Avatar" 
+      width="150"
+      style="cursor: pointer; border-radius: 50%;" 
+    />
+
+    <div class="status-indicator"></div>
+
+    <!-- Upload button (camera icon) -->
+    <button 
+      class="avatar-upload" 
+      (click)="onAvatarClick()" 
+      title="Change Avatar" 
+      type="button"
+      aria-label="Change profile picture"
+    >
+      📷
+    </button>
+
+    <!-- Hidden file input -->
+    <input 
+      type="file" 
+      #fileInput 
+      accept="image/*" 
+      (change)="onFileSelected($event)" 
+      style="display: none" 
+    />
+  </div>
+
+  <!-- View Mode -->
+  <div *ngIf="!isEditing; else editMode">
+    <h2>{{ user.name }}</h2>
+    <p class="subtitle">{{ user.phoneNumber }}</p>
+
+    <div class="form-section">
+      <div class="info-item">
+        <span class="info-label">📧 Email:</span>
+        <span class="info-value">{{ user.email }}</span>
+      </div>
+    </div>
+
+    <div class="form-section" *ngIf="user.address; else noAddress">
+      <h3><span class="section-icon">🏠</span> Address</h3>
+      
+      <div class="info-item" *ngIf="user.address.street; else noStreet">
+        <span class="info-label">Street:</span>
+        <span class="info-value">{{ user.address.street }}</span>
+      </div>
+      <ng-template #noStreet>
+        <div class="info-item"><em>Street not provided</em></div>
+      </ng-template>
+
+      <div class="info-item" *ngIf="user.address.city || user.address.state || user.address.zip; else noLocation">
+        <span class="info-label">Location:</span>
+        <span class="info-value">
+          {{ user.address.city }}<span *ngIf="user.address.city && user.address.state">, </span>{{ user.address.state }} {{ user.address.zip }}
+        </span>
+      </div>
+      <ng-template #noLocation>
+        <div class="info-item"><em>Location details not provided</em></div>
+      </ng-template>
+    </div>
+
+    <ng-template #noAddress>
+      <p><em>No address information available.</em></p>
+    </ng-template>
+
+    <div class="btn-container">
+      <button class="btn btn-primary" (click)="startEdit()" type="button">✏️ Edit Profile</button>
+    </div>
+  </div>
+
+  <!-- Edit Mode -->
+  <ng-template #editMode> 
+    <div *ngIf="editableUser">
+      <input [(ngModel)]="editableUser.name" placeholder="Name" />
+
+      <p>
+        <strong>Email:</strong><br />
+        <input [(ngModel)]="editableUser.email" placeholder="Email" />
+      </p> 
+
+      <p>
+        <strong>Number:</strong><br />
+        <input [(ngModel)]="editableUser.phoneNumber" placeholder="Number" />
+      </p> 
+
+      <div class="address">
+        <h3>Address</h3>
+        <p><input placeholder="Street" [(ngModel)]="editableUser.address.street" /></p>
+        <p>
+          <input placeholder="City" [(ngModel)]="editableUser.address.city" />
+          <input placeholder="State" class="short-input" [(ngModel)]="editableUser.address.state" />
+          <input placeholder="ZIP" class="medium-input" [(ngModel)]="editableUser.address.zip" />
+        </p>
+      </div>
+
+      <div class="btn-container">
+        <button class="btn btn-primary" (click)="saveChanges()" type="button">Save Changes</button>
+        <button class="btn btn-secondary" (click)="cancelEdit()" type="button">Cancel</button>
+      </div>
+    </div>
+  </ng-template>
+
+</div>

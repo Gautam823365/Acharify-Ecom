@@ -1,0 +1,164 @@
+<div class="welcome-dashboard">
+  <!-- Animated Tree Background -->
+  <div class="tree-background">
+    <!-- Trees -->
+    <div class="tree tree-1">
+      <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+        <!-- Tree trunk -->
+        <rect x="42" y="90" width="16" height="60" fill="#8B4513"/>
+        <!-- Tree foliage layers -->
+        <polygon points="50,10 20,50 80,50" fill="#228B22"/>
+        <polygon points="50,30 25,65 75,65" fill="#32CD32"/>
+        <polygon points="50,50 30,85 70,85" fill="#228B22"/>
+      </svg>
+    </div>
+    
+    <div class="tree tree-2">
+      <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+        <rect x="42" y="90" width="16" height="60" fill="#8B4513"/>
+        <polygon points="50,15 25,55 75,55" fill="#32CD32"/>
+        <polygon points="50,35 30,70 70,70" fill="#228B22"/>
+        <polygon points="50,55 35,90 65,90" fill="#2E8B57"/>
+      </svg>
+    </div>
+    
+    <div class="tree tree-3">
+      <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+        <rect x="42" y="95" width="16" height="55" fill="#8B4513"/>
+        <polygon points="50,5 15,45 85,45" fill="#228B22"/>
+        <polygon points="50,25 20,60 80,60" fill="#32CD32"/>
+        <polygon points="50,45 25,80 75,80" fill="#228B22"/>
+        <polygon points="50,65 30,95 70,95" fill="#2E8B57"/>
+      </svg>
+    </div>
+    
+    <div class="tree tree-4">
+      <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+        <rect x="42" y="95" width="16" height="55" fill="#8B4513"/>
+        <polygon points="50,20 28,58 72,58" fill="#32CD32"/>
+        <polygon points="50,40 33,73 67,73" fill="#228B22"/>
+        <polygon points="50,60 38,95 62,95" fill="#2E8B57"/>
+      </svg>
+    </div>
+    
+    <div class="tree tree-5">
+      <svg viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+        <rect x="42" y="85" width="16" height="65" fill="#8B4513"/>
+        <polygon points="50,8 22,48 78,48" fill="#228B22"/>
+        <polygon points="50,28 27,63 73,63" fill="#32CD32"/>
+        <polygon points="50,48 32,83 68,83" fill="#228B22"/>
+      </svg>
+    </div>
+    
+    <!-- Falling Leaves -->
+    <div class="leaves">
+      <div class="leaf"></div>
+      <div class="leaf"></div>
+      <div class="leaf"></div>
+      <div class="leaf"></div>
+      <div class="leaf"></div>
+    </div>
+  </div>
+
+  <!-- Main Dashboard Content -->
+  <div class="dashboard-content">
+    <!-- Acharify Logo -->
+    <div class="acharify-logo">Acharify</div>
+
+    <!-- Cart Button -->
+    <div class="cart-container">
+      <button class="cart-btn" (click)="goToCart()">
+        🛒 Cart <span class="cart-badge" *ngIf="cartCount > 0">{{ cartCount }}</span>
+      </button>
+    </div>
+
+    <!-- User Profile (Dropdown with Image or Emoji Fallback) -->
+    <div
+      class="user-profile"
+      tabindex="0"
+      (click)="toggleProfileMenu()"
+      (blur)="closeProfileMenu()"
+    >
+      <img
+        *ngIf="userProfile?.profileImage; else defaultProfile"
+        [src]="userProfile?.profileImage"
+        alt="Profile"
+        class="profile-image"
+      />
+      <ng-template #defaultProfile>
+        <div class="profile-logo-text">👤</div>
+      </ng-template>
+      
+      <!-- Dropdown Menu -->
+      <div class="profile-menu" *ngIf="showProfileMenu">
+        <ul>
+          <li><button (click)="viewProfile()">View Profile</button></li>
+          <li><button (click)="Orders()">Orders</button></li>
+          <li><button (click)="settings()">Settings</button></li>
+          <li><button (click)="logout()">Logout</button></li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Header -->
+    <div class="header-container">
+      <h1 class="center-text">Welcome, {{ userName || 'Guest' }}</h1>
+      <p class="center-text">Select a state to explore its famous pickles.</p>
+    </div>
+
+    <!-- Loader and Error -->
+    <p class="loading-text" *ngIf="loading">Loading states...</p>
+    <p class="error-text" *ngIf="errorMessage">{{ errorMessage }}</p>
+
+    <!-- States Grid -->
+   <div
+  class="states-scroll-container"
+  *ngIf="!loading && !errorMessage && !selectedState"
+>
+  <table class="states-table" role="grid">
+    <tr *ngFor="let row of states | chunk:4" role="row">
+      <td
+        *ngFor="let state of row"
+        (click)="selectState(state)"
+        class="state-cell"
+        tabindex="0"
+        role="gridcell"
+        [attr.aria-label]="'Select ' + state.stateName"
+      >
+        <p class="state-name">{{ state.stateName }}</p>
+      </td>
+    </tr>
+  </table>
+</div>
+
+    <!-- Products Modal -->
+    <div
+      class="state-detail"
+      *ngIf="selectedState"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="stateName"
+    >
+      <div class="detail-content">
+        <button class="close-btn" (click)="closeDetail()" aria-label="Close details">✕</button>
+        <h2 id="stateName">{{ selectedState.stateName }}</h2>
+        <div class="product-scroll-container">
+          <div *ngIf="products.length > 0; else noProducts">
+            <div class="product-grid">
+              <div class="product-card" *ngFor="let product of products">
+                <h3>{{ product.productsName }}</h3>
+                <p>{{ product.productsDescription }}</p>
+                <p><strong>Price:</strong> ₹{{ product.productsUnitPrice }}</p>
+                <p><strong>Available:</strong> {{ product.productsQuantity }}</p>
+                <button class="add-to-cart-btn" (click)="addToCart(product)">Add to Cart</button>
+              </div>
+            </div>
+          </div>
+          <ng-template #noProducts>
+            <p class="no-products-message">No products found for {{ selectedState.stateName }}.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

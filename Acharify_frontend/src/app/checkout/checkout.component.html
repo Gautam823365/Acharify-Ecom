@@ -1,0 +1,95 @@
+<div class="checkout-container">
+  <div class="checkout-grid">
+    
+    <!-- LEFT COLUMN -->
+    <div class="checkout-left">
+
+      <!-- Header -->
+      <div class="header">
+        <div class="title">
+          <span class="icon">🛒</span>
+          <span>Checkout</span>
+        </div>
+        <p class="subtitle">Complete your eco-friendly purchase</p>
+      </div>
+
+   <mat-card class="section">
+  <h3>Products in Your Cart</h3>
+
+  <div *ngFor="let item of cartItems" class="product-row">
+
+    <!-- Product Name -->
+    <div class="product-name">
+      {{ item.product.productsName }}
+    </div>
+
+    <!-- Quantity -->
+    <div class="quantity-control">
+      <button (click)="decreaseQuantity(item)">-</button>
+      <span class="qty-box">{{ item.quantity }}</span>
+      <button (click)="increaseQuantity(item)">+</button>
+    </div>
+
+    <!-- Price -->
+   <div class="product-price">
+  ₹{{ item.quantity * (item.product.productsUnitPrice || 0) }}
+</div>
+
+
+  </div>
+</mat-card>
+
+
+
+
+      <!-- Delivery Date -->
+      <mat-card class="section">
+        <h3>Delivery</h3>
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Select Delivery Date</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="deliveryDate" placeholder="Choose a date">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+      </mat-card>
+
+      <!-- Payment Method -->
+      <mat-card class="section">
+        <h3>Payment</h3>
+        <mat-radio-group [(ngModel)]="paymentMethod" class="payment-options">
+          <mat-radio-button *ngFor="let option of paymentOptions" [value]="option.value">
+            {{ option.label }}
+          </mat-radio-button>
+        </mat-radio-group>
+      </mat-card>
+
+    </div>
+
+    <!-- RIGHT COLUMN -->
+    <div class="checkout-right">
+      <mat-card class="section summary-section">
+        <h3>Order Summary</h3>
+
+        <div class="summary-row">
+          <span>Subtotal</span>
+          <span>₹{{ subtotal }}</span>
+        </div>
+
+        <div class="summary-row">
+          <span>Shipping</span>
+          <span>₹{{ shipping }}</span>
+        </div>
+
+        <div class="summary-total">
+          <span>Total</span>
+          <span>₹{{ total }}</span>
+        </div>
+
+        <button  class="pay-btn" (click)="proceedToPay()">
+          Pay ₹{{ total }}
+        </button>
+      </mat-card>
+    </div>
+
+  </div>
+</div>

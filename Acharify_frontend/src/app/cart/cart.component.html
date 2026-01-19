@@ -1,0 +1,41 @@
+<div class="cart-page">
+  <h2>🛒 Your Cart</h2>
+
+  <div *ngIf="cartItems.length === 0; else cartList">
+    <p>Your cart is empty.</p>
+  </div>
+
+  <ng-template #cartList>
+    <table class="cart-table">
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Quantity</th>
+          <th>Subtotal</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of cartItems">
+          <td>{{ item.product.productsName }}</td>
+          <td>₹{{ item.product.productsUnitPrice ?? 0 }}</td>
+          <td>
+            <div class="quantity-control">
+              <button (click)="decreaseQuantity(item)">−</button>
+              <span>{{ item.quantity || 1 }}</span>
+              <button (click)="increaseQuantity(item)">+</button>
+            </div>
+          </td>
+          <td>₹{{ (item.product.productsUnitPrice ?? 0) * (item.quantity || 1) }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Total: ₹{{ getTotal() }}</h3>
+
+    <div class="cart-actions">
+      <button class="clear-btn" (click)="clearCart()">Clear Cart</button>
+      <button class="checkout-btn"(click)="proceedToCart()">Proceed to Checkout</button>
+    </div>
+  </ng-template>
+</div>

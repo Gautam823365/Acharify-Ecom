@@ -1,0 +1,258 @@
+/* ================== CHECKOUT PAGE ================== */
+.checkout-container {
+  background: #f9f6f1;
+  padding: 30px 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+}
+
+.checkout-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 24px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Sections */
+.checkout-left .section,
+.checkout-right .section {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  margin-bottom: 20px;
+}
+
+/* Header */
+.header {
+  margin-bottom: 24px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  font-size: 28px;
+  font-weight: 600;
+  color: #2e7d32;
+  margin-bottom: 8px;
+}
+
+.title .icon {
+  font-size: 32px;
+  margin-right: 12px;
+}
+
+.subtitle {
+  color: #6d4c41;
+  font-size: 15px;
+  margin: 0;
+  padding-left: 44px;
+}
+
+/* Section Titles */
+.section h3 {
+  margin: 0 0 20px 0;
+  font-weight: 600;
+  font-size: 20px;
+  color: #1b5e20;
+}
+
+/* Product Row - Improved Grid Layout */
+.product-row {
+  display: grid;
+  grid-template-columns: 2fr auto auto;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.product-row:last-child {
+  border-bottom: none;
+}
+
+.product-row:first-child {
+  padding-top: 0;
+}
+
+/* Product Name */
+.product-name {
+  font-weight: 500;
+  font-size: 16px;
+  color: #3e2723;
+}
+
+/* Quantity Controls - Centered */
+.quantity-control {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.quantity-control button {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 6px;
+  background: #388e3c;
+  color: white;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.quantity-control button:hover {
+  background: #2e7d32;
+}
+
+.quantity-control button:active {
+  transform: scale(0.95);
+}
+
+.qty-box {
+  min-width: 45px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #a5d6a7;
+  border-radius: 6px;
+  font-weight: 600;
+  color: #2e7d32;
+  background: #f1f8e9;
+}
+
+/* Price - Right Aligned */
+.product-price {
+  text-align: right;
+  font-weight: 700;
+  color: #1b5e20;
+  font-size: 18px;
+  min-width: 80px;
+}
+
+/* Delivery Date Input */
+.full-width {
+  width: 100%;
+}
+
+/* Payment Options */
+.payment-options {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.payment-options mat-radio-button {
+  font-size: 16px;
+}
+
+/* Summary Section */
+.summary-section {
+  position: sticky;
+  top: 20px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 14px;
+  font-size: 16px;
+  color: #4e342e;
+}
+
+.summary-row span:first-child {
+  font-weight: 500;
+}
+
+.summary-row span:last-child {
+  font-weight: 600;
+  color: #2e7d32;
+}
+
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 20px;
+  font-weight: 700;
+  border-top: 2px solid #d7ccc8;
+  padding-top: 16px;
+  margin-top: 16px;
+  color: #1b5e20;
+}
+
+/* Pay Button */
+.pay-btn {
+  width: 100%;
+  margin-top: 20px;
+  padding: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: #4e342e;
+  color: #ffffff;
+  border: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(78, 52, 46, 0.3);
+}
+
+.pay-btn:hover {
+  background: #2e7d32;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(46, 125, 50, 0.4);
+}
+
+.pay-btn:active {
+  transform: translateY(0);
+}
+
+/* Mobile Responsive */
+@media (max-width: 768px) {
+  .checkout-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .checkout-container {
+    padding: 20px 15px;
+  }
+
+  .product-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .product-name {
+    order: 1;
+  }
+
+  .quantity-control {
+    order: 2;
+    justify-content: flex-start;
+  }
+
+  .product-price {
+    order: 3;
+    text-align: left;
+  }
+
+  .summary-section {
+    position: static;
+  }
+
+  .title {
+    font-size: 24px;
+  }
+
+  .subtitle {
+    padding-left: 36px;
+  }
+}

@@ -1,0 +1,325 @@
+<div class="dashboard-container">
+  <!-- Header -->
+  <div class="dashboard-header">
+    <div class="header-content">
+      <div class="header-left">
+        <div class="title-section">
+          <span class="icon">👨‍💼</span>
+          <div>
+            <h1>Supplier Management</h1>
+            <p class="subtitle">Manage your supplier network</p>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-secondary" (click)="exportToCSV()" *ngIf="suppliers.length > 0">
+          <span>📊</span> Export CSV
+        </button>
+        <button class="btn btn-primary" (click)="toggleForm()">
+          <span>{{ showForm ? '✕' : '+' }}</span> {{ showForm ? 'Cancel' : 'Add Supplier' }}
+        </button>
+        <button class="btn btn-logout"(click)="logout()">
+            Logout
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Statistics Cards -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon total">👥</div>
+      <div class="stat-info">
+        <div class="stat-value">{{ statistics.total }}</div>
+        <div class="stat-label">Total Suppliers</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon active">✓</div>
+      <div class="stat-info">
+        <div class="stat-value">{{ statistics.active }}</div>
+        <div class="stat-label">Active Suppliers</div>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon inactive">⏸</div>
+      <div class="stat-info">
+        <div class="stat-value">{{ statistics.inactive }}</div>
+        <div class="stat-label">Inactive Suppliers</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add/Edit Form -->
+  <div class="form-card" *ngIf="showForm">
+    <div class="form-header">
+      <h2>{{ isEditing ? 'Edit Supplier' : 'Add New Supplier' }}</h2>
+      <button class="close-btn" (click)="toggleForm()">✕</button>
+    </div>
+    
+    <form [formGroup]="supplierForm" (ngSubmit)="onSubmit()">
+      <div class="form-grid">
+        <!-- Owner Name -->
+        <div class="form-group full-width">
+          <label for="ownerName">Owner Name <span class="required">*</span></label>
+          <input 
+            type="text" 
+            id="ownerName"
+            formControlName="ownerName"
+            placeholder="Enter owner's full name"
+            [class.invalid]="supplierForm.get('ownerName')?.invalid && supplierForm.get('ownerName')?.touched">
+          <span class="error-message" *ngIf="supplierForm.get('ownerName')?.invalid && supplierForm.get('ownerName')?.touched">
+            Owner name is required (min 3 characters)
+          </span>
+        </div>
+
+        <!-- Shop Name -->
+        <div class="form-group full-width">
+          <label for="shopName">Shop/Business Name <span class="required">*</span></label>
+          <input 
+            type="text" 
+            id="shopName"
+            formControlName="shopName"
+            placeholder="Enter shop or business name"
+            [class.invalid]="supplierForm.get('shopName')?.invalid && supplierForm.get('shopName')?.touched">
+          <span class="error-message" *ngIf="supplierForm.get('shopName')?.invalid && supplierForm.get('shopName')?.touched">
+            Shop name is required (min 3 characters)
+          </span>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email Address <span class="required">*</span></label>
+          <input 
+            type="email" 
+            id="email"
+            formControlName="email"
+            placeholder="supplier@example.com"
+            [class.invalid]="supplierForm.get('email')?.invalid && supplierForm.get('email')?.touched">
+          <span class="error-message" *ngIf="supplierForm.get('email')?.invalid && supplierForm.get('email')?.touched">
+            Valid email is required
+          </span>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label for="phone">Phone Number <span class="required">*</span></label>
+          <input 
+            type="tel" 
+            id="phone"
+            formControlName="phone"
+            placeholder="10-digit mobile number"
+            maxlength="10"
+            [class.invalid]="supplierForm.get('phone')?.invalid && supplierForm.get('phone')?.touched">
+          <span class="error-message" *ngIf="supplierForm.get('phone')?.invalid && supplierForm.get('phone')?.touched">
+            Valid 10-digit phone number required
+          </span>
+        </div>
+
+        <!-- GSTIN Number -->
+       <!-- <div class="form-group full-width">
+  <label for="supplierId">Supplier ID <span class="required">*</span></label>
+  <input 
+    type="text" 
+    id="supplierId"
+    formControlName="supplierId"
+    placeholder="e.g., SUP-12345"
+    style="text-transform: uppercase"
+    [class.invalid]="supplierForm.get('supplierId')?.invalid && supplierForm.get('supplierId')?.touched">
+  <span class="error-message" *ngIf="supplierForm.get('supplierId')?.invalid && supplierForm.get('supplierId')?.touched">
+    Supplier ID is required
+  </span>
+</div> -->
+
+<div class="form-group full-width">
+  <label for="gstinNumber">GSTIN Number <span class="required">*</span></label>
+  <input 
+    type="text" 
+    id="gstinNumber"
+    formControlName="gstinNumber"
+    placeholder="e.g., 29ABCDE1234F1Z5"
+    maxlength="15"
+    style="text-transform: uppercase"
+    [class.invalid]="supplierForm.get('gstinNumber')?.invalid && supplierForm.get('gstinNumber')?.touched">
+  <span class="error-message" *ngIf="supplierForm.get('gstinNumber')?.invalid && supplierForm.get('gstinNumber')?.touched">
+    Valid GSTIN format required (15 characters)
+  </span>
+</div>
+
+        <!-- Address -->
+        <div class="form-group full-width">
+          <label for="address">Address <span class="required">*</span></label>
+          <textarea 
+            id="address"
+            formControlName="address"
+            placeholder="Enter complete address"
+            rows="3"
+            [class.invalid]="supplierForm.get('address')?.invalid && supplierForm.get('address')?.touched"></textarea>
+          <span class="error-message" *ngIf="supplierForm.get('address')?.invalid && supplierForm.get('address')?.touched">
+            Address is required (min 10 characters)
+          </span>
+        </div>
+
+        <!-- City -->
+        <div class="form-group">
+          <label for="city">City <span class="required">*</span></label>
+          <input 
+            type="text" 
+            id="city"
+            formControlName="city"
+            placeholder="Enter city"
+            [class.invalid]="supplierForm.get('city')?.invalid && supplierForm.get('city')?.touched">
+          <span class="error-message" *ngIf="supplierForm.get('city')?.invalid && supplierForm.get('city')?.touched">
+            City is required
+          </span>
+        </div>
+
+        <!-- State -->
+        <div class="form-group">
+          <label for="state">State <span class="required">*</span></label>
+          <select 
+            id="state"
+            formControlName="state"
+            [class.invalid]="supplierForm.get('state')?.invalid && supplierForm.get('state')?.touched">
+            <option value="">Select State</option>
+            <option *ngFor="let state of states" [value]="state">{{ state }}</option>
+          </select>
+          <span class="error-message" *ngIf="supplierForm.get('state')?.invalid && supplierForm.get('state')?.touched">
+            State is required
+          </span>
+        </div>
+
+        <!-- Pincode -->
+        <div class="form-group">
+          <label for="pincode">Pincode <span class="required">*</span></label>
+          <input 
+            type="text" 
+            id="pincode"
+            formControlName="pincode"
+            placeholder="6-digit pincode"
+            maxlength="6"
+            [class.invalid]="supplierForm.get('pincode')?.invalid && supplierForm.get('pincode')?.touched">
+          <span class="error-message" *ngIf="supplierForm.get('pincode')?.invalid && supplierForm.get('pincode')?.touched">
+            Valid 6-digit pincode required
+          </span>
+        </div>
+
+        <!-- Status -->
+        <div class="form-group">
+          <label for="status">Status <span class="required">*</span></label>
+          <select id="status" formControlName="status">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+        </div>
+
+</div>
+     
+
+
+      <div class="form-actions">
+        <button type="button" class="btn btn-secondary" (click)="toggleForm()">Cancel</button>
+        <button type="submit" class="btn btn-primary">
+          {{ isEditing ? 'Update Supplier' : 'Add Supplier' }}
+        </button>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- Search and Filter -->
+  <div class="toolbar">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <input 
+        type="text" 
+        placeholder="Search by name, email, phone, or GSTIN..."
+        [(ngModel)]="searchTerm">
+    </div>
+    <div class="filter-group">
+      <label>Filter:</label>
+      <select [(ngModel)]="filterStatus">
+        <option value="all">All Suppliers</option>
+        <option value="active">Active Only</option>
+        <option value="inactive">Inactive Only</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Suppliers List -->
+  <div class="suppliers-section">
+    <div class="empty-state" *ngIf="filteredSuppliers.length === 0 && suppliers.length === 0">
+      <div class="empty-icon">📋</div>
+      <h3>No Suppliers Added Yet</h3>
+      <p>Click "Add Supplier" button to create your first supplier</p>
+    </div>
+
+    <div class="empty-state" *ngIf="filteredSuppliers.length === 0 && suppliers.length > 0">
+      <div class="empty-icon">🔍</div>
+      <h3>No Results Found</h3>
+      <p>Try adjusting your search or filter criteria</p>
+    </div>
+
+    <div class="suppliers-grid" *ngIf="filteredSuppliers.length > 0">
+      <div class="supplier-card" *ngFor="let supplier of filteredSuppliers">
+        <div class="card-header">
+          <div class="supplier-avatar">{{ supplier.ownerName.charAt(0).toUpperCase() }}</div>
+          <div class="supplier-main-info">
+            <h3>{{ supplier.shopName }}</h3>
+            <p class="owner-name">Owner: {{ supplier.ownerName }}</p>
+          </div>
+          <div class="status-badge" [class.active]="supplier.status === 'active'" [class.inactive]="supplier.status === 'inactive'">
+            {{ supplier.status | uppercase }}
+          </div>
+        </div>
+
+        <div class="card-body">
+          <div class="info-row">
+            <span class="info-icon">📧</span>
+            <div class="info-content">
+              <span class="info-label">Email</span>
+              <span class="info-value">{{ supplier.email }}</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <span class="info-icon">📱</span>
+            <div class="info-content">
+              <span class="info-label">Phone</span>
+              <span class="info-value">{{ supplier.phone }}</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <span class="info-icon">🏢</span>
+            <div class="info-content">
+              <span class="info-label">GSTIN</span>
+              <span class="info-value gstin">{{ supplier.gstinNumber }}</span>
+            </div>
+          </div>
+
+          <div class="info-row">
+            <span class="info-icon">📍</span>
+            <div class="info-content">
+              <span class="info-label">Address</span>
+              <span class="info-value">{{ supplier.address }}, {{ supplier.city }}, {{ supplier.state }} - {{ supplier.pincode }}</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="card-actions">
+          <button class="btn-action edit" (click)="editSupplier(supplier)" title="Edit">
+            <span>✏️</span> Edit
+          </button>
+          <button class="btn-action toggle" (click)="toggleStatus(supplier)" title="Toggle Status">
+            <span>{{ supplier.status === 'active' ? '⏸' : '▶️' }}</span> 
+            {{ supplier.status === 'active' ? 'Deactivate' : 'Activate' }}
+          </button>
+          <button class="btn-action delete" (click)="deleteSupplier(supplier.supplierId!)" title="Delete">
+            <span>🗑️</span> DeleteWS
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

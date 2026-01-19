@@ -1,0 +1,41 @@
+<div class="orders-container">
+  <h2>My Orders</h2>
+
+  <div *ngIf="loading">Loading orders...</div>
+  <div *ngIf="error">{{ error }}</div>
+
+  <div class="order-card" *ngFor="let order of orders">
+    <!-- Header -->
+    <div class="order-header">
+      <span class="order-id">Order #{{ order.id }}</span>
+      <span class="order-date">{{ order.date | date }}</span>
+      <span class="order-status" [ngClass]="order.status.toLowerCase()">{{ order.status }}</span>
+    </div>
+
+    <!-- Items -->
+    <div class="order-items">
+      <div class="order-item" *ngFor="let item of order.items">
+        <img [src]="item.imageUrl" alt="{{ item.name }}">
+        <div class="item-details">
+          <h4>{{ item.name }}</h4>
+          <p>Qty: {{ item.quantity }}</p>
+          <p>Price: {{ item.price | currency:'INR' }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Summary -->
+    <div class="order-summary">
+      <p><strong>Payment:</strong> {{ order.paymentMethod }}</p>
+      <p><strong>Address:</strong> {{ order.address }}</p>
+      <p class="order-total">Total: {{ order.total | currency:'INR' }}</p>
+    </div>
+
+    <!-- Actions -->
+    <div class="order-actions">
+      <button class="track-btn">Track</button>
+      <button class="invoice-btn">Invoice</button>
+      <button class="cancel-btn" *ngIf="order.status === 'Pending'">Cancel</button>
+    </div>
+  </div>
+</div>

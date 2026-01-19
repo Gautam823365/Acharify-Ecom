@@ -1,0 +1,51 @@
+# Java
+target/
+*.log
+
+# Node
+node_modules/
+dist/
+build/
+
+# Env
+.env
+
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# OS
+.DS_Store
+
+# ======================
+# OS
+# ======================
+.DS_Store
+Thumbs.db
+
+# ======================
+# IDE / Editor
+# ======================
+.metadata/
+.idea/
+.vscode/
+*.iml
+
+# ======================
+# Backend (Java / Spring)
+# ======================
+target/
+*.log
+
+# ======================
+# Frontend (Node / Angular)
+# ======================
+node_modules/
+dist/
+build/
+
+# ======================
+# Env files
+# ======================
+.env
